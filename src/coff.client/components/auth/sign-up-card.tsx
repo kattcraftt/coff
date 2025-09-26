@@ -20,17 +20,21 @@ import {
 import Link from "next/link";
 
 const formSchema = z.object({
-    name: z.string().trim().min(1, "Required"),
     email: z.string().email(),
     password: z.string().min(8, "Minimum 8 characters required"),
-});
+    confirmPassword: z.string(),
+})
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+    });
 export const SignUpCard = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
             email: "",
             password: "",
+            confirmPassword: "",
         },
     });
 
@@ -62,22 +66,6 @@ export const SignUpCard = () => {
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
-                            name="name"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input
-                                            type="text"
-                                            placeholder="Name"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
                             name="email"
                             control={form.control}
                             render={({ field }) => (
@@ -102,6 +90,22 @@ export const SignUpCard = () => {
                                         <Input
                                             type="password"
                                             placeholder="Password"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="confirmPassword"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input
+                                            type="password"
+                                            placeholder="Confirm Password"
                                             {...field}
                                         />
                                     </FormControl>
