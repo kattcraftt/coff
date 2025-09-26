@@ -4,41 +4,47 @@ namespace coff.API.SharedKernel;
 
 public class Result
 {
-    public Result(bool isSuccess, Error error)
+    public Result(bool isSuccess, IReadOnlyList<Error> errors)
     {
-        if (isSuccess && error != Error.None ||
-            !isSuccess && error == Error.None)
+        if (isSuccess && errors.Any() ||
+            !isSuccess && errors.Count == 0)
         {
-            throw new ArgumentException("Invalid error", nameof(error));
+            throw new ArgumentException("Invalid error", nameof(errors));
         }
 
         IsSuccess = isSuccess;
-        Error = error;
+        Errors = errors;
     }
 
     public bool IsSuccess { get; }
 
     public bool IsFailure => !IsSuccess;
 
-    public Error Error { get; }
+    public IReadOnlyList<Error> Errors { get; }
 
-    public static Result Success() => new(true, Error.None);
+    public static Result Success() => new(true, Array.Empty<Error>());
 
     public static Result<TValue> Success<TValue>(TValue value) =>
-        new(value, true, Error.None);
+        new(value, true, Array.Empty<Error>());
 
-    public static Result Failure(Error error) => new(false, error);
+    public static Result Failure(Error error) => new(false, new[] { error });
 
+    public static Result Failure(IEnumerable<Error> errors) =>
+        new(false, errors.ToList());
+    
     public static Result<TValue> Failure<TValue>(Error error) =>
-        new(default, false, error);
+        new(default, true, new[] { error });
+
+    public static Result<TValue> Failure<TValue>(IEnumerable<Error> errors) =>
+        new(default, false, errors.ToList());
 }
 
 public class Result<TValue> : Result
 {
     private readonly TValue? _value;
 
-    public Result(TValue? value, bool isSuccess, Error error)
-        : base(isSuccess, error)
+    public Result(TValue? value, bool isSuccess, IReadOnlyList<Error> errors)
+        : base(isSuccess, errors)
     {
         _value = value;
     }
@@ -51,6 +57,6 @@ public class Result<TValue> : Result
     public static implicit operator Result<TValue>(TValue? value) =>
         value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
 
-    public static Result<TValue> ValidationFailure(Error error) =>
-        new(default, false, error);
+    public static Result<TValue> ValidationFailure(IReadOnlyList<Error> errors) =>
+        new(default, false, errors);
 }

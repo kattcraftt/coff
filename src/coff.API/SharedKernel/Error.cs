@@ -34,4 +34,8 @@ public record Error
 
     public static Error Conflict(string code, string description) =>
         new(code, description, ErrorType.Conflict);
+    
+    /* Factory for multiple errors (e.g., from Identity or FluentValidation)*/
+    public static IReadOnlyList<Error> From(IEnumerable<(string Code, string Description)> errors, ErrorType type = ErrorType.Failure) =>
+        errors.Select(error => new Error(error.Code, error.Description, type)).ToList();
 }
