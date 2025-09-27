@@ -42,8 +42,7 @@
       <Folder Include="Abstractions\" />
       <Folder Include="Controllers\" />
       <Folder Include="Extensions\" />
-      <Folder Include="Features\Users\" />
-      <Folder Include="SharedKernel\Infrastructure\" />
+      <Folder Include="Features\Users\Commands\" />
     </ItemGroup>
 
 </Project>
