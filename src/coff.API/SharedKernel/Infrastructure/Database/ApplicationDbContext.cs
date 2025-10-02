@@ -1,4 +1,5 @@
 ﻿using coff.API.Abstractions.Data;
+using coff.API.SharedKernel.Domain.Accounts;
 using coff.API.SharedKernel.Domain.Users;
 using coff.API.SharedKernel.Infrastructure.DomainEvents;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,8 @@ public sealed class ApplicationDbContext(
     IDomainEventsDispatcher domainEventsDispatcher)
     : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options), IApplicationDbContext
 {
+    public DbSet<Account> Accounts { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
