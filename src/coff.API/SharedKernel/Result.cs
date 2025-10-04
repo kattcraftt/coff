@@ -22,6 +22,8 @@ public class Result
 
     public IReadOnlyList<Error> Errors { get; }
 
+    public Error Error => Errors[0];
+
     public static Result Success() => new(true, Array.Empty<Error>());
 
     public static Result<TValue> Success<TValue>(TValue value) =>

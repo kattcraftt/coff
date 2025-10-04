@@ -1,6 +1,4 @@
-﻿using coff.API.SharedKernel.Domain;
-
-namespace coff.API.SharedKernel;
+﻿namespace coff.API.SharedKernel;
 
 public abstract class Entity
 {
