@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace coff.API.SharedKernel.Infrastructure.Database;
 
-public sealed class ApplicationDbContext(
-    DbContextOptions<ApplicationDbContext> options,
+public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
     IDomainEventsDispatcher domainEventsDispatcher)
     : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options), IApplicationDbContext
 {
@@ -22,12 +21,12 @@ public sealed class ApplicationDbContext(
         #region Table configurations
 
         builder.Entity<User>(e => e.ToTable("Users"));
-        builder.Entity<IdentityRole>(e => e.ToTable("Roles"));
-        builder.Entity<IdentityUserRole<string>>(e => e.ToTable("UserRoles"));
-        builder.Entity<IdentityUserClaim<string>>(e => e.ToTable("UserClaims"));
-        builder.Entity<IdentityUserLogin<string>>(e => e.ToTable("UserLogins"));
-        builder.Entity<IdentityUserToken<string>>(e => e.ToTable("UserTokens"));
-        builder.Entity<IdentityRoleClaim<string>>(e => e.ToTable("RoleClaims"));
+        builder.Entity<IdentityRole<Guid>>(e => e.ToTable("Roles"));
+        builder.Entity<IdentityUserRole<Guid>>(e => e.ToTable("UserRoles"));
+        builder.Entity<IdentityUserClaim<Guid>>(e => e.ToTable("UserClaims"));
+        builder.Entity<IdentityUserLogin<Guid>>(e => e.ToTable("UserLogins"));
+        builder.Entity<IdentityUserToken<Guid>>(e => e.ToTable("UserTokens"));
+        builder.Entity<IdentityRoleClaim<Guid>>(e => e.ToTable("RoleClaims"));
         
         #endregion
         
