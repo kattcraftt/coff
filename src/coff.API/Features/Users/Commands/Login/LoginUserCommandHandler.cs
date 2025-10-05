@@ -4,7 +4,7 @@ using coff.API.SharedKernel;
 using coff.API.SharedKernel.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
-namespace coff.API.Features.Users.Login;
+namespace coff.API.Features.Users.Commands.Login;
 
 internal sealed class LoginUserCommandHandler(
     UserManager<User> userManager,
@@ -29,6 +29,6 @@ internal sealed class LoginUserCommandHandler(
 
         string token = tokenProvider.Create(user);
 
-        return Result.Success(token);
+        return token;
     }
 }

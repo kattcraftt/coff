@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace coff.API.Features.Users.Register;
+namespace coff.API.Features.Users.Commands.Register;
 
 internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {

@@ -1,6 +1,5 @@
 ﻿using coff.API.Abstractions.Authentication;
 using coff.API.Abstractions.Messaging;
-using coff.API.Features.Users.GetById;
 using coff.API.SharedKernel;
 using coff.API.SharedKernel.Domain.Users;
 using Microsoft.AspNetCore.Identity;

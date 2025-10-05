@@ -4,9 +4,8 @@ using coff.API.SharedKernel;
 using coff.API.SharedKernel.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Shouldly;
 
-namespace coff.API.Features.Users.Register;
+namespace coff.API.Features.Users.Commands.Register;
 
 internal sealed class RegisterUserCommandHandler(UserManager<User> userManager)
     : ICommandHandler<RegisterUserCommand, Guid>
@@ -35,6 +34,6 @@ internal sealed class RegisterUserCommandHandler(UserManager<User> userManager)
             return Result.Failure<Guid>(new ValidationError(errors));
         }
 
-        return Result.Success(user.Id);
+        return user.Id;
     }
 }
