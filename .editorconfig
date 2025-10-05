@@ -353,6 +353,9 @@ dotnet_diagnostic.ide0005.severity = none
 # IDE0046: Convert to conditional expression
 dotnet_diagnostic.ide0046.severity = none
 
+# IDE0053: Disable “Use expression body for lambda expression”
+dotnet_diagnostic.ide0053.severity = none
+
 # IDE0058: Expression value is never used
 dotnet_diagnostic.ide0058.severity = none
 

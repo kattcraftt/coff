@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTests", "tests\ArchitectureTests\ArchitectureTests.csproj", "{AE0814FB-2171-425C-A434-1277A40835AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{370275A9-F293-4968-9B46-69F73F0D78B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{370275A9-F293-4968-9B46-69F73F0D78B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{370275A9-F293-4968-9B46-69F73F0D78B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE0814FB-2171-425C-A434-1277A40835AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE0814FB-2171-425C-A434-1277A40835AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE0814FB-2171-425C-A434-1277A40835AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE0814FB-2171-425C-A434-1277A40835AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
