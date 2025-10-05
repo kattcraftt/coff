@@ -16,6 +16,6 @@ internal sealed class AccountConfiguration : IEntityTypeConfiguration<Account>
 
         builder.HasOne<User>()
             .WithMany()
-            .HasForeignKey(a => a.UserId);
+            .HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
     }
 }
