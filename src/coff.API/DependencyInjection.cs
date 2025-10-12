@@ -7,11 +7,14 @@ using coff.API.SharedKernel;
 using coff.API.SharedKernel.Domain.Users;
 using coff.API.SharedKernel.Infrastructure;
 using coff.API.SharedKernel.Infrastructure.Authentication;
+using coff.API.SharedKernel.Infrastructure.Authorization;
 using coff.API.SharedKernel.Infrastructure.Database;
 using coff.API.SharedKernel.Infrastructure.DomainEvents;
+using coff.API.SharedKernel.Infrastructure.Messaging;
 using coff.API.SharedKernel.Infrastructure.Time;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +74,7 @@ public static class DependencyInjection
     {
         services.AddTransient<IDomainEventsDispatcher, DomainEventsDispatcher>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddScoped<ISender, Sender>();
 
         return services;
     }
@@ -136,6 +140,12 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
     {
         services.AddAuthorization();
+        
+        services.AddScoped<PermissionProvider>();
+
+        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         
         return services;
     }
