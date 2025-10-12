@@ -35,7 +35,7 @@ public class Result
         new(false, errors.ToList());
     
     public static Result<TValue> Failure<TValue>(Error error) =>
-        new(default, true, new[] { error });
+        new(default, false, new[] { error });
 
     public static Result<TValue> Failure<TValue>(IEnumerable<Error> errors) =>
         new(default, false, errors.ToList());

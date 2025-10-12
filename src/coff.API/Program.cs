@@ -1,3 +1,4 @@
+using System.Reflection;
 using coff.API;
 using coff.API.Extensions;
 using HealthChecks.UI.Client;
@@ -8,22 +9,27 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
+builder.Services.AddSwaggerGenWithAuth();
+
 builder.Services
-    .AddInfrastructure(builder.Configuration)
     .AddApplication()
-    .AddPresentation();
+    .AddPresentation()
+    .AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
+
 WebApplication app = builder.Build();
+
+app.MapEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    
+    app.UseSwaggerWithUi();
     await app.ApplyMigrationsAsync();
 }
 
