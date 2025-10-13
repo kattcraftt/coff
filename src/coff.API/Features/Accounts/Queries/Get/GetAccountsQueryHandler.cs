@@ -13,20 +13,14 @@ internal sealed class GetAccountsQueryHandler(IApplicationDbContext context, IUs
 {
     public async Task<Result<List<AccountResponse>>> Handle(GetAccountsQuery query, CancellationToken cancellationToken)
     {
-        if (query.UserId != userContext.UserId)
-        {
-            return Result.Failure<List<AccountResponse>>(UserErrors.Unauthorized());
-        }
-
         List<AccountResponse> accounts = await context.Accounts
-            .Where(account => account.UserId == query.UserId)
+            .Where(account => account.UserId == userContext.UserId)
             .Select(account => new AccountResponse
             {
                 Id = account.Id,
                 Name = account.Name,
                 UserId = account.UserId
             }).ToListAsync(cancellationToken);
-
         
         return accounts;
     }
