@@ -10,30 +10,22 @@ using Microsoft.EntityFrameworkCore;
 namespace coff.API.Features.Accounts.Commands.CreateAccount;
 
 internal sealed class CreateAccountCommandHandler(
-    UserManager<User> userManager,
     IApplicationDbContext context,
     IUserContext userContext) 
     : ICommandHandler<CreateAccountCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateAccountCommand command, CancellationToken cancellationToken)
     {
-        if (userContext.UserId != command.UserId)
+        if (!userContext.IsAuthenticated)
         {
             return Result.Failure<Guid>(UserErrors.Unauthorized());
         }
 
-        User? user = await userManager.Users.AsNoTracking()
-            .SingleOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
-
-        if (user is null)
-        {
-            return Result.Failure<Guid>(UserErrors.NotFound(command.UserId));
-        }
-
         var account = new Account
         {
-            UserId = user.Id,
-            Name = command.Name
+            Id = Guid.NewGuid(),
+            Name = command.Name,
+            UserId = userContext.UserId
         };
         
         account.Raise(new AccountCreatedDomainEvent(account.Id));

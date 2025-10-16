@@ -10,7 +10,7 @@ namespace coff.API.Endpoints.Accounts;
 
 internal sealed class Create : IEndpoint
 {
-    public sealed record Request(string Name, Guid UserId);
+    public sealed record Request(string Name);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -20,7 +20,7 @@ internal sealed class Create : IEndpoint
             CancellationToken cancellationToken) =>
         {
             var command = new CreateAccountCommand(
-                request.Name, request.UserId);
+                request.Name);
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
 
