@@ -1,4 +1,5 @@
-﻿using coff.API.Abstractions.Authentication;
+﻿using System.Security.Claims;
+using coff.API.Abstractions.Authentication;
 using coff.API.SharedKernel.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Http;
 
@@ -19,4 +20,10 @@ internal sealed class UserContext : IUserContext
             .User
             .GetUserId() ??
         throw new ApplicationException("User context is unavailable");
+
+    public string? Email =>
+        _httpContextAccessor.HttpContext?.User.GetEmail();
+
+    public bool IsAuthenticated => 
+        _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 }
