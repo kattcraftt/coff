@@ -1,5 +1,7 @@
 ﻿using coff.API.Abstractions.Data;
 using coff.API.SharedKernel.Domain.Accounts;
+using coff.API.SharedKernel.Domain.Categories;
+using coff.API.SharedKernel.Domain.Transactions;
 using coff.API.SharedKernel.Domain.Users;
 using coff.API.SharedKernel.Infrastructure.DomainEvents;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +15,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options), IApplicationDbContext
 {
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<Category>  Categories { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
