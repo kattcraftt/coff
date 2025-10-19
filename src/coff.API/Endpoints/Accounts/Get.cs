@@ -1,6 +1,6 @@
 ﻿using coff.API.Abstractions.Messaging;
 using coff.API.Endpoints.Shared;
-using coff.API.Features.Accounts.Queries.Get;
+using coff.API.Features.Accounts.Queries.GetAccounts;
 using coff.API.Features.Accounts.Queries;
 using coff.API.SharedKernel;
 using coff.API.Extensions;

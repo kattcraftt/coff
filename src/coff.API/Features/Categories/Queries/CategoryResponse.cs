@@ -1,6 +1,6 @@
-namespace coff.API.Features.Accounts.Queries;
+namespace coff.API.Features.Categories.Queries;
 
-public sealed class AccountResponse
+public sealed class CategoryResponse
 {
     public Guid Id { get; init; }
     public Guid UserId { get; init; }
