@@ -1,7 +1,4 @@
-using coff.API.SharedKernel.Domain.Accounts;
-using coff.API.SharedKernel.Domain.Categories;
 using coff.API.SharedKernel.Domain.Transactions;
-using coff.API.SharedKernel.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,12 +13,12 @@ internal sealed class TransactionConfiguration : IEntityTypeConfiguration<Transa
         builder.Property(t => t.Amount)
             .HasColumnType("decimal(18,2)");
         
-        builder.HasOne<Account>()
-            .WithMany()
+        builder.HasOne(t => t.Account)
+            .WithMany(a => a.Transactions)
             .HasForeignKey(a => a.AccountId).OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<Category>()
-            .WithMany()
+        builder.HasOne(t => t.Category)
+            .WithMany(c => c.Transactions)
             .HasForeignKey(c => c.CategoryId).OnDelete(DeleteBehavior.SetNull);
     }
 }
