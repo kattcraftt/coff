@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGenWithAuth();
 
 builder.Services
     .AddApplication()
-    .AddPresentation()
+    .AddPresentation(builder.Configuration)
     .AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
@@ -23,6 +23,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 app.MapEndpoints();
 
