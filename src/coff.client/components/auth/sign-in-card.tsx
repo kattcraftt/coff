@@ -1,3 +1,4 @@
+"use client";
 import { z } from "zod";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -6,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { DottedSeparator } from '../dotted-separator';
 import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
+import { LoadingOverlay } from "../ui/loading-overlay";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import {
@@ -13,10 +16,12 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage
 } from "../ui/form";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { login } from "@/lib/auth/auth";
+import { ApiError, getFieldErrors } from "@/lib/errors";
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -24,6 +29,7 @@ const formSchema = z.object({
 });
 
 export const SignInCard = () => {
+    const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -32,8 +38,31 @@ export const SignInCard = () => {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log({ values });
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            await login({ email: values.email, password: values.password });
+            // If ASP.NET sets an auth cookie, you're now authenticated
+            router.push("/dashboard");
+        } catch (err) {
+            const fieldErrors = getFieldErrors(err);
+            if (fieldErrors) {
+                const mapKey = (k: string) => k.toLowerCase();
+                const fields = Object.keys(values).reduce<Record<string, string>>((acc, k) => {
+                    acc[mapKey(k)] = k;
+                    return acc;
+                }, {});
+                for (const [serverKey, messages] of Object.entries(fieldErrors)) {
+                    const msg = messages?.[0];
+                    const clientKey = fields[mapKey(serverKey)];
+                    if (clientKey && msg) {
+                        // @ts-expect-error dynamic key is ok for react-hook-form here
+                        form.setError(clientKey, { message: msg });
+                    }
+                }
+            }
+            const message = err instanceof ApiError ? err.message : "Login failed";
+            if (!fieldErrors) form.setError("root", { message });
+        }
     };
 
     return (
@@ -46,7 +75,8 @@ export const SignInCard = () => {
             <div className="px-7">
                 <DottedSeparator />
             </div>
-            <CardContent className="p-7">
+            <CardContent className="p-7 relative">
+                <LoadingOverlay show={form.formState.isSubmitting} label="Signing in" />
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
@@ -81,9 +111,14 @@ export const SignInCard = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={false} size="lg" className="w-full">
+                        {form.formState.errors.root?.message && (
+                            <p className="text-sm text-red-600">
+                                {form.formState.errors.root.message}
+                            </p>
+                        )}
+                        <LoadingButton isLoading={form.formState.isSubmitting} size="lg" className="w-full" loadingText="Signing in">
                             Login
-                        </Button>
+                        </LoadingButton>
                     </form>
                 </Form>
             </CardContent>

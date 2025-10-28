@@ -1,3 +1,4 @@
+"use client";
 import { z } from "zod";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -6,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { DottedSeparator } from "../dotted-separator";
 import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
+import { LoadingOverlay } from "../ui/loading-overlay";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import {
@@ -13,11 +16,13 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage
 } from "../ui/form";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { register as registerUser } from "@/lib/auth/auth";
+import { ApiError, getFieldErrors } from "@/lib/errors";
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -29,6 +34,7 @@ const formSchema = z.object({
         path: ["confirmPassword"],
     });
 export const SignUpCard = () => {
+    const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -38,8 +44,37 @@ export const SignUpCard = () => {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log({ values });
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        // Map to API DTO (omit confirmPassword)
+        try {
+            await registerUser({
+                email: values.email,
+                password: values.password,
+                confirmPassword: values.confirmPassword
+            });
+            // Redirect to login after successful registration
+            router.push("/sign-in");
+        } catch (err) {
+            const fieldErrors = getFieldErrors(err);
+            if (fieldErrors) {
+                // Case-insensitive mapping to form fields (ASP.NET ModelState often uses PascalCase)
+                const mapKey = (k: string) => k.toLowerCase();
+                const fields = Object.keys(values).reduce<Record<string, string>>((acc, k) => {
+                    acc[mapKey(k)] = k;
+                    return acc;
+                }, {});
+                for (const [serverKey, messages] of Object.entries(fieldErrors)) {
+                    const msg = messages?.[0];
+                    const clientKey = fields[mapKey(serverKey)];
+                    if (clientKey && msg) {
+                        // @ts-expect-error dynamic key is ok for react-hook-form here
+                        form.setError(clientKey, { message: msg });
+                    }
+                }
+            }
+            const message = err instanceof ApiError ? err.message : "Registration failed";
+            if (!fieldErrors) form.setError("root", { message });
+        }
     };
 
     return (
@@ -62,7 +97,8 @@ export const SignUpCard = () => {
             <div className="px-7">
                 <DottedSeparator />
             </div>
-            <CardContent className="p-7">
+            <CardContent className="p-7 relative">
+                <LoadingOverlay show={form.formState.isSubmitting} label="Creating account" />
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
@@ -113,9 +149,14 @@ export const SignUpCard = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={false} size="lg" className="w-full">
+                        {form.formState.errors.root?.message && (
+                            <p className="text-sm text-red-600">
+                                {form.formState.errors.root.message}
+                            </p>
+                        )}
+                        <LoadingButton isLoading={form.formState.isSubmitting} size="lg" className="w-full" loadingText="Creating account">
                             Sign up
-                        </Button>
+                        </LoadingButton>
                     </form>
                 </Form>
             </CardContent>
