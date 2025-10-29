@@ -11,6 +11,7 @@ import { LoadingButton } from "../ui/loading-button";
 import { LoadingOverlay } from "../ui/loading-overlay";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
+import { PasswordInput } from "../ui/password-input";
 import {
     Form,
     FormControl,
@@ -101,9 +102,9 @@ export const SignInCard = () => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Input
-                                            type="password"
+                                        <PasswordInput
                                             placeholder="Password"
+                                            autoComplete="current-password"
                                             {...field}
                                         />
                                     </FormControl>
