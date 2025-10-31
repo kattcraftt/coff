@@ -18,7 +18,7 @@ public static class UserErrors
         "Users.EmailNotUnique",
         "The provided email is not unique");
     
-    public static readonly Error InvalidCredentials = Error.Failure(
+    public static readonly Error InvalidCredentials = Error.NotFound(
         "Users.InvalidCredentials",
         "The email or password is incorrect.");
 }

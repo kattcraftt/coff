@@ -37,9 +37,14 @@ api.interceptors.response.use(
             message = data;
         } else if (isRecord(data)) {
             // RFC 7807 ProblemDetails or custom { message }
+            const description = data["description"];
+            const detail = data["detail"];
             const title = data["title"];
             const msg = data["message"];
-            if (typeof title === "string") message = title;
+
+            if (typeof description === "string") message = description;
+            else if (typeof detail === "string") message = detail;
+            else if (typeof title === "string") message = title;
             else if (typeof msg === "string") message = msg;
         } else if (status) {
             message = `${status} ${error.response?.statusText || "Error"}`;
