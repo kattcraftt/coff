@@ -5,7 +5,7 @@ import { FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { DottedSeparator } from '../dotted-separator';
+import { LineSeparator } from "../line-separator";
 import { Button } from "../ui/button";
 import { LoadingButton } from "../ui/loading-button";
 import { LoadingOverlay } from "../ui/loading-overlay";
@@ -68,13 +68,12 @@ export const SignInCard = () => {
 
     return (
         <Card className="w-full h-full md:w-[487px] border-none shadow-none">
-            <CardHeader className="flex items-center justify-center text-center p-7">
+            <CardHeader className="flex items-center justify-center text-center p-5">
                 <CardTitle className="text-2xl">
                     Welcome back!
                 </CardTitle>
             </CardHeader>
             <div className="px-7">
-                <DottedSeparator />
             </div>
             <CardContent className="p-7 relative">
                 <LoadingOverlay show={form.formState.isSubmitting} label="Signing in" />
@@ -124,7 +123,7 @@ export const SignInCard = () => {
                 </Form>
             </CardContent>
             <div className="px-7">
-                <DottedSeparator />
+                <LineSeparator />
             </div>
             <CardContent className="p-7 flex flex-col gap-y-4">
                 <Button
@@ -146,14 +145,11 @@ export const SignInCard = () => {
                     Github
                 </Button>
             </CardContent>
-            <div className="px-7">
-                <DottedSeparator />
-            </div>
-            <CardContent className="p-7 flex items-center justify-center">
+            <CardContent className="p-4 flex items-center justify-center">
                 <p>
                     Don&apos;t have an account?
-                    <Link href={"/sign-up"}>
-                        <span className="text-blue-700">&nbsp;Sign Up</span>
+                    <Link href={"/register"}>
+                        <span className="text-blue-700">&nbsp;Register</span>
                     </Link>
                 </p>
             </CardContent>

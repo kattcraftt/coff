@@ -5,7 +5,7 @@ import { FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { DottedSeparator } from "../dotted-separator";
+import { LineSeparator } from "../line-separator";
 import { Button } from "../ui/button";
 import { LoadingButton } from "../ui/loading-button";
 import { LoadingOverlay } from "../ui/loading-overlay";
@@ -79,10 +79,10 @@ export const SignUpCard = () => {
     };
 
     return (
-        <Card className="w-full h-full md:w-[487px] border-none shadow-none">
-            <CardHeader className="items-center justify-center text-center p-7">
+        <Card className="w-full h-full md:w-[487px] border-none shadow-none rounded-2xl">
+            <CardHeader className="items-center justify-center text-center p-5">
                 <CardTitle className="text-2xl">
-                    Sign Up
+                    Create Account
                 </CardTitle>
                 <CardDescription>
                     By signing up, you agree to our{" "}
@@ -96,7 +96,6 @@ export const SignUpCard = () => {
                 </CardDescription>
             </CardHeader>
             <div className="px-7">
-                <DottedSeparator />
             </div>
             <CardContent className="p-7 relative">
                 <LoadingOverlay show={form.formState.isSubmitting} label="Creating account" />
@@ -156,13 +155,13 @@ export const SignUpCard = () => {
                             </p>
                         )}
                         <LoadingButton isLoading={form.formState.isSubmitting} size="lg" className="w-full" loadingText="Creating account">
-                            Sign up
+                            Register
                         </LoadingButton>
                     </form>
                 </Form>
             </CardContent>
             <div className="px-7">
-                <DottedSeparator />
+                <LineSeparator />
             </div>
             <CardContent className="p-7 flex flex-col gap-y-4">
                 <Button
@@ -184,13 +183,10 @@ export const SignUpCard = () => {
                     Github
                 </Button>
             </CardContent>
-            <div className="px-7">
-                <DottedSeparator />
-            </div>
-            <CardContent className="p-7 flex items-center justify-center">
+            <CardContent className="p-4 flex items-center justify-center">
                 <p>
                     Already have an account?
-                    <Link href={"/sign-in"}>
+                    <Link href={"/login"}>
                         <span className="text-blue-700">&nbsp;Login</span>
                     </Link>
                 </p>
