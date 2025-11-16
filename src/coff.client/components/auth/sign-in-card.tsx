@@ -43,7 +43,7 @@ export const SignInCard = () => {
         try {
             await login({ email: values.email, password: values.password });
             // If ASP.NET sets an auth cookie, you're now authenticated
-            router.push("/dashboard");
+            router.push("/");
         } catch (err) {
             const fieldErrors = getFieldErrors(err);
             if (fieldErrors) {

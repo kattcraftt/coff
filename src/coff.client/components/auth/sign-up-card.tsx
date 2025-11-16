@@ -54,7 +54,7 @@ export const SignUpCard = () => {
                 confirmPassword: values.confirmPassword
             });
             // Redirect to login after successful registration
-            router.push("/sign-in");
+            router.push("/login");
         } catch (err) {
             const fieldErrors = getFieldErrors(err);
             if (fieldErrors) {

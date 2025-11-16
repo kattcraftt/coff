@@ -14,7 +14,7 @@ export const LineSeparator = ({
     return (
         <div className={cn("w-full flex items-center", className)}>
             <div className="flex-1 h-[2px]" style={{ backgroundColor: color }} />
-            <span className="mx-3 text-sm text-muted-foreground">{text}</span>
+            <span className="mx-3 text-sm">{text}</span>
             <div className="flex-1 h-[2px]" style={{ backgroundColor: color }} />
         </div>
     );
