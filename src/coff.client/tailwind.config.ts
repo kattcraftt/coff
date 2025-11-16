@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss";
 
 export default {
 	content: [
-		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./app/**/*.{js,ts,jsx,tsx,mdx}",
 	],
@@ -12,16 +11,17 @@ export default {
 				// Brand palette (shades for brand usage across the app)
 				brand: {
 					mint: {
-						50: '#F7FFFE',
-						100: '#EAFDFD',
-						200: '#CBF3F0',
-						300: '#8DE2D5',
-						400: '#2EC4B6',
-						500: '#2EC4B6',
-						600: '#27AB99',
-						700: '#198F7F'
+						50: "var(--color-brand-mint-50)",
+						100: "var(--color-brand-mint-100)",
+						200: "var(--color-brand-mint-200)",
+						300: "var(--color-brand-mint-300)",
+						400: "var(--color-brand-mint-400)",
+						500: "var(--color-brand-mint-500)",
+						600: "var(--color-brand-mint-600)",
+						700: "var(--color-brand-mint-700)",
 					}
 				},
+
 
 				// Semantic tokens powered by CSS variables for runtime theming
 				background: 'var(--color-background)',
@@ -42,6 +42,18 @@ export default {
 				muted: {
 					DEFAULT: 'var(--color-muted)',
 					foreground: 'var(--color-muted-foreground)'
+				},
+				secondary: {
+					DEFAULT: 'var(--secondary)',
+					foreground: 'var(--secondary-foreground)'
+				},
+				accent: {
+					DEFAULT: 'var(--accent)',
+					foreground: 'var(--accent-foreground)'
+				},
+				destructive: {
+					DEFAULT: 'var(--destructive)',
+					foreground: 'var(--destructive-foreground)'
 				},
 				border: 'var(--color-border)',
 				input: 'var(--color-input)',
