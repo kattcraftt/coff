@@ -13,9 +13,7 @@ internal sealed class Update : IEndpoint
         string FirstName, 
         string? MiddleName, 
         string LastName, 
-        string PhoneNumber, 
-        string? OldPassword, 
-        string? NewPassword);
+        string PhoneNumber);
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut("users/me", async (
@@ -29,8 +27,6 @@ internal sealed class Update : IEndpoint
                 MiddleName = request.MiddleName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
-                OldPassword = request.OldPassword,
-                NewPassword = request.NewPassword
             };
 
             Result result = await handler.Handle(command, cancellationToken);

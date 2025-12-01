@@ -12,7 +12,7 @@ internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("accounts", async (
+        app.MapGet("categories", async (
             IQueryHandler<GetCategoriesQuery, List<CategoryResponse>> handler,
             CancellationToken cancellationToken) =>
         {

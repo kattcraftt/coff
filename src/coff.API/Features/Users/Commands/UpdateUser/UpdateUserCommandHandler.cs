@@ -39,22 +39,6 @@ internal sealed class UpdateUserCommandHandler(
                     .Select(e => Error.Problem(e.Code, e.Description))
                     .ToList());
         }
-
-        if (!string.IsNullOrWhiteSpace(command.NewPassword))
-        {
-            IdentityResult passwordResult = await userManager.ChangePasswordAsync(
-                user,
-                command.OldPassword!,
-                command.NewPassword!);
-
-            if (!passwordResult.Succeeded)
-            {
-                return Result.Failure(
-                    passwordResult.Errors
-                        .Select(e => Error.Problem(e.Code, e.Description))
-                        .ToList());
-            }
-        }
         
         return Result.Success();
     }
