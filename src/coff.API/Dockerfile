@@ -10,7 +10,7 @@ WORKDIR /src
 COPY ["src/coff.API/coff.API.csproj", "src/coff.API/"]
 RUN dotnet restore "src/coff.API/coff.API.csproj"
 COPY . .
-WORKDIR "/src/src/coff.API"
+WORKDIR "/src/coff.API"
 RUN dotnet build "./coff.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
