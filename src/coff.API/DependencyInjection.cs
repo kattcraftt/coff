@@ -1,8 +1,10 @@
 using System.Text;
+using Azure.Identity;
 using coff.API.Abstractions.Authentication;
 using coff.API.Abstractions.Behaviors;
 using coff.API.Abstractions.Data;
 using coff.API.Abstractions.Messaging;
+using coff.API.Abstractions.Storage;
 using coff.API.SharedKernel;
 using coff.API.SharedKernel.Domain.Users;
 using coff.API.SharedKernel.Infrastructure;
@@ -11,12 +13,14 @@ using coff.API.SharedKernel.Infrastructure.Authorization;
 using coff.API.SharedKernel.Infrastructure.Database;
 using coff.API.SharedKernel.Infrastructure.DomainEvents;
 using coff.API.SharedKernel.Infrastructure.Messaging;
+using coff.API.SharedKernel.Infrastructure.Storage;
 using coff.API.SharedKernel.Infrastructure.Time;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Azure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
@@ -64,18 +68,38 @@ public static class DependencyInjection
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection service, IConfiguration configuration) => 
         service
-            .AddServices()
+            .AddServices(configuration)
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
             .AddAuthenticationInternal(configuration)
             .AddAuthorizationInternal();
 
-    private static IServiceCollection AddServices(this IServiceCollection services)
+    private static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<IDomainEventsDispatcher, DomainEventsDispatcher>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<ISender, Sender>();
+        services.AddScoped<IBlobService, BlobService>();
+        
+        services.AddAzureClients(clientBuilder =>
+        {
+            BlobStorageOptions options = configuration
+                .GetSection("BlobStorage")
+                .Get<BlobStorageOptions>()!;
 
+            if (options.UseConnectionString)
+            {
+                /* dev */
+                clientBuilder.AddBlobServiceClient(options.ConnectionString!);
+            }
+            else
+            {
+                /* prod */
+                clientBuilder.AddBlobServiceClient(new Uri(options.AccountUrl!))
+                    .WithCredential(new DefaultAzureCredential());
+            }
+        });
+        
         return services;
     }
 
