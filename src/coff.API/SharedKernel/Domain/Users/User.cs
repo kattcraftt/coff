@@ -14,5 +14,5 @@ public sealed class User : IdentityUser<Guid>
         string.Join(" ", new[] { FirstName, MiddleName, LastName }
                 .Where(n => !string.IsNullOrEmpty(n)));
     
-    public string? ProfileImageUrl { get; set; }
+    public Guid? ProfileImageId { get; set; }
 }
