@@ -1,5 +1,6 @@
 using System.Text;
 using Azure.Identity;
+using Azure.Storage.Blobs;
 using coff.API.Abstractions.Authentication;
 using coff.API.Abstractions.Behaviors;
 using coff.API.Abstractions.Data;
@@ -80,7 +81,8 @@ public static class DependencyInjection
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<ISender, Sender>();
         services.AddScoped<IBlobService, BlobService>();
-        
+        services.Configure<BlobStorageOptions>(
+            configuration.GetSection("BlobStorage"));
         services.AddAzureClients(clientBuilder =>
         {
             BlobStorageOptions options = configuration

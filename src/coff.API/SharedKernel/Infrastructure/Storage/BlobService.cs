@@ -32,15 +32,14 @@ internal sealed class BlobService(BlobServiceClient blobServiceClient, IOptions<
     }
 
     public async Task<FileResponse> DownloadAsync(
-        string containerKey, 
+        string containerKey,
         Guid userId,
         Guid fileId, 
         CancellationToken cancellationToken = default)
     {
         BlobContainerClient containerClient = await GetContainerAsync(containerKey);
         
-        var fileid = Guid.NewGuid();
-        string blobName = $"{userId}/{fileid}";
+        string blobName = $"{userId}/{fileId}";
         
         BlobClient blobClient = containerClient.GetBlobClient(blobName);
 
@@ -54,8 +53,7 @@ internal sealed class BlobService(BlobServiceClient blobServiceClient, IOptions<
     {
         BlobContainerClient containerClient = await GetContainerAsync(containerKey);
         
-        var fileid = Guid.NewGuid();
-        string blobName = $"{userId}/{fileid}";
+        string blobName = $"{userId}/{fileId}";
         
         BlobClient blobClient = containerClient.GetBlobClient(blobName);
         
