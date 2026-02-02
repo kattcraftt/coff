@@ -7,4 +7,6 @@ public interface IBlobService
     Task<FileResponse> DownloadAsync(string containerKey, Guid userId, Guid fileId, CancellationToken cancellationToken = default);
     
     Task DeleteAsync(string containerKey, Guid userId, Guid fileId, CancellationToken cancellationToken = default);
+    
+    Uri? GetPublicUrl(string containerKey, Guid userId, Guid fileId);
 }

@@ -60,6 +60,24 @@ internal sealed class BlobService(BlobServiceClient blobServiceClient, IOptions<
         await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
     }
 
+    public Uri? GetPublicUrl(string containerKey, Guid userId, Guid fileId)
+    {
+        BlobContainerOptions config = options.Value.Containers[containerKey];
+
+        if (!config.Public)
+        {
+            return null;
+        }
+
+        BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(config.Name);
+
+        string blobName = $"{userId}/{fileId}";
+
+        BlobClient blobClient = containerClient.GetBlobClient(blobName);
+        
+        return blobClient.Uri;
+    }
+
     private async Task<BlobContainerClient> GetContainerAsync(string key)
     {
         BlobContainerOptions config = options.Value.Containers[key];
