@@ -12,7 +12,7 @@ internal sealed class DisplayProfile : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("users/me/display-profile-image", async (
+        app.MapGet("users/me/display-profile-image", async (
                 IQueryHandler<DisplayProfileImageQuery, FileResponse> handler,
                 CancellationToken cancellationToken) =>
             {

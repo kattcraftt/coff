@@ -24,7 +24,6 @@ internal sealed class DisplayProfileImageQueryHandler(
         {
             return Result.Failure<FileResponse>(UserErrors.NotFound(userId));
         }
-
         FileResponse file = await blobService.DownloadAsync(
             BlobContainers.ProfileImages,
             userId,
