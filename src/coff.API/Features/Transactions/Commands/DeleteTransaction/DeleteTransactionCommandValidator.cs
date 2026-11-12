@@ -1,11 +1,11 @@
 using FluentValidation;
 
-namespace coff.API.Features.Categories.Commands.DeleteCategory;
+namespace coff.API.Features.Transactions.Commands.DeleteTransaction;
 
-internal sealed class DeleteTransactionCommandValidator : AbstractValidator<DeleteCategoryCommand>
+internal sealed class DeleteTransactionCommandValidator : AbstractValidator<DeleteTransactionCommand>
 {
     public DeleteTransactionCommandValidator()
     {
-        RuleFor(c => c.CategoryId).NotEmpty();
+        RuleFor(c => c.TransactionId).NotEmpty();
     }
 }

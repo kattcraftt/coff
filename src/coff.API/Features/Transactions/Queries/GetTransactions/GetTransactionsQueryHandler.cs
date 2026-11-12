@@ -21,7 +21,9 @@ internal sealed class GetTransactionsQueryHandler(IApplicationDbContext context,
                 Amount = t.Amount,
                 Payee = t.Payee,
                 Notes = t.Notes,
-                Date = t.Date
+                Date = t.Date,
+                AccountId = t.AccountId,
+                CategoryId = t.CategoryId
             })
             .ToListAsync(cancellationToken);
         

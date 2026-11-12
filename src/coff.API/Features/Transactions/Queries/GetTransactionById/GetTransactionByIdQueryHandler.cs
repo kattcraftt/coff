@@ -20,7 +20,10 @@ internal sealed class GetTransactionByIdQueryHandler(IApplicationDbContext conte
                 Id = t.Id,
                 Amount = t.Amount,
                 Payee = t.Payee,
-                Notes = t.Notes
+                Notes = t.Notes,
+                Date = t.Date,
+                AccountId = t.AccountId,
+                CategoryId = t.CategoryId
             })
             .SingleOrDefaultAsync(cancellationToken);
 

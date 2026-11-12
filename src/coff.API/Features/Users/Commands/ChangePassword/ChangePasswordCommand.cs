@@ -4,7 +4,7 @@ namespace coff.API.Features.Users.Commands.ChangePassword;
 
 public sealed class ChangePasswordCommand : ICommand
 {
-    public string OldPassword { get; set; }
+    public required string OldPassword { get; set; }
     
-    public string NewPassword { get; set; }
+    public required string NewPassword { get; set; }
 }

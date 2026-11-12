@@ -6,7 +6,10 @@ internal sealed class CreateTransactionCommandValidator : AbstractValidator<Crea
 {
     public CreateTransactionCommandValidator()
     {
-        RuleFor(t => t.Amount).NotEmpty();
-        RuleFor(t => t.Payee).NotEmpty();
+        RuleFor(t => t.AccountId).NotEmpty();
+        RuleFor(t => t.CategoryId).NotEmpty();
+        RuleFor(t => t.Amount).NotEqual(0);
+        RuleFor(t => t.Payee).NotEmpty().MaximumLength(200);
+        RuleFor(t => t.Notes).MaximumLength(1000);
     }
 }

@@ -6,6 +6,10 @@ public static class UserErrors
         "Users.NotFound",
         $"The user with the Id = '{userId}' was not found.");
     
+    public static Error ProfileImageNotFound(Guid userId) => Error.NotFound(
+        "Users.ProfileImageNotFound",
+        $"The user with the Id = '{userId}' has no profile image.");
+
     public static Error Unauthorized() => Error.Failure(
         "Users.Unauthorized",
         "You are not authorized to perform this action.");

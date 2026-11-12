@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace coff.API.Extensions;
 
@@ -23,22 +23,10 @@ internal static class ServiceCollectionExtensions
 
             o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
 
-            var securityRequirement = new OpenApiSecurityRequirement
+            o.AddSecurityRequirement(document => new OpenApiSecurityRequirement
             {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = JwtBearerDefaults.AuthenticationScheme
-                        }
-                    },
-                    []
-                }
-            };
-
-            o.AddSecurityRequirement(securityRequirement);
+                [new OpenApiSecuritySchemeReference(JwtBearerDefaults.AuthenticationScheme, document)] = []
+            });
         });
 
         return services;

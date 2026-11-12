@@ -29,6 +29,10 @@ internal sealed class GetUsersQueryHandler(
         {
             Id = user.Id,
             FullName = user.FullName,
+            FirstName = user.FirstName,
+            MiddleName = user.MiddleName,
+            LastName = user.LastName,
+            PhoneNumber = user.PhoneNumber,
             Email = user.Email!,
             ProfileImageUrl = user.ProfileImageId.HasValue
                 ? blobService.GetPublicUrl(BlobContainers.ProfileImages, user.Id, user.ProfileImageId.Value)?

@@ -18,7 +18,7 @@ namespace coff.API.SharedKernel.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("public")
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -241,6 +241,68 @@ namespace coff.API.SharedKernel.Infrastructure.Database.Migrations
                     b.ToTable("categories", "public");
                 });
 
+            modelBuilder.Entity("coff.API.SharedKernel.Domain.Receipts.Receipt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at_utc");
+
+                    b.Property<string>("Currency")
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)")
+                        .HasColumnName("currency");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("image_id");
+
+                    b.Property<string>("Merchant")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("merchant");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.Property<decimal?>("Tax")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)")
+                        .HasColumnName("tax");
+
+                    b.Property<decimal?>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)")
+                        .HasColumnName("total");
+
+                    b.Property<Guid?>("TransactionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("transaction_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_receipts");
+
+                    b.HasIndex("UserId", "CreatedAtUtc")
+                        .HasDatabaseName("ix_receipts_user_id_created_at_utc");
+
+                    b.ToTable("receipts", "public");
+                });
+
             modelBuilder.Entity("coff.API.SharedKernel.Domain.Transactions.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -457,6 +519,16 @@ namespace coff.API.SharedKernel.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_categories_users_user_id");
+                });
+
+            modelBuilder.Entity("coff.API.SharedKernel.Domain.Receipts.Receipt", b =>
+                {
+                    b.HasOne("coff.API.SharedKernel.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_receipts_users_user_id");
                 });
 
             modelBuilder.Entity("coff.API.SharedKernel.Domain.Transactions.Transaction", b =>

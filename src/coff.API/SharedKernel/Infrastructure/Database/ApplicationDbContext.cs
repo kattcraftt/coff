@@ -1,6 +1,7 @@
 ﻿using coff.API.Abstractions.Data;
 using coff.API.SharedKernel.Domain.Accounts;
 using coff.API.SharedKernel.Domain.Categories;
+using coff.API.SharedKernel.Domain.Receipts;
 using coff.API.SharedKernel.Domain.Transactions;
 using coff.API.SharedKernel.Domain.Users;
 using coff.API.SharedKernel.Infrastructure.DomainEvents;
@@ -16,13 +17,14 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 {
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Category>  Categories { get; set; }
+    public DbSet<Receipt>  Receipts { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        #region Table configurations
+        #region User Table configurations
 
         builder.Entity<User>(e => e.ToTable("Users"));
         builder.Entity<IdentityRole<Guid>>(e => e.ToTable("Roles"));

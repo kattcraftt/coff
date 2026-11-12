@@ -24,10 +24,17 @@ internal sealed class DisplayProfileImageQueryHandler(
         {
             return Result.Failure<FileResponse>(UserErrors.NotFound(userId));
         }
+
+        // A user who never uploaded a picture has no ProfileImageId: that is a 404, not a crash.
+        if (user.ProfileImageId is not Guid profileImageId)
+        {
+            return Result.Failure<FileResponse>(UserErrors.ProfileImageNotFound(userId));
+        }
+
         FileResponse file = await blobService.DownloadAsync(
             BlobContainers.ProfileImages,
             userId,
-            user.ProfileImageId!.Value,
+            profileImageId,
             cancellationToken);
 
         return file;

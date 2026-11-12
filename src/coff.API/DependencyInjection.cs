@@ -5,6 +5,7 @@ using coff.API.Abstractions.Authentication;
 using coff.API.Abstractions.Behaviors;
 using coff.API.Abstractions.Data;
 using coff.API.Abstractions.Messaging;
+using coff.API.Abstractions.Receipts;
 using coff.API.Abstractions.Storage;
 using coff.API.SharedKernel;
 using coff.API.SharedKernel.Domain.Users;
@@ -14,6 +15,7 @@ using coff.API.SharedKernel.Infrastructure.Authorization;
 using coff.API.SharedKernel.Infrastructure.Database;
 using coff.API.SharedKernel.Infrastructure.DomainEvents;
 using coff.API.SharedKernel.Infrastructure.Messaging;
+using coff.API.SharedKernel.Infrastructure.Receipts;
 using coff.API.SharedKernel.Infrastructure.Storage;
 using coff.API.SharedKernel.Infrastructure.Time;
 using FluentValidation;
@@ -24,6 +26,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Azure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace coff.API;
@@ -80,6 +83,19 @@ public static class DependencyInjection
         services.AddTransient<IDomainEventsDispatcher, DomainEventsDispatcher>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<ISender, Sender>();
+        services.Configure<ReceiptOptions>(configuration.GetSection(ReceiptOptions.SectionName));
+        services.Configure<AnthropicOptions>(configuration.GetSection(AnthropicOptions.SectionName));
+        services.AddHttpClient<IReceiptExtractor, AnthropicReceiptExtractor>((serviceProvider, client) =>
+        {
+            AnthropicOptions anthropic = serviceProvider.GetRequiredService<IOptions<AnthropicOptions>>().Value;
+
+            if (Uri.TryCreate(anthropic.BaseUrl, UriKind.Absolute, out Uri? baseAddress))
+            {
+                client.BaseAddress = baseAddress;
+            }
+
+            client.Timeout = TimeSpan.FromSeconds(60);
+        });
         services.AddScoped<IBlobService, BlobService>();
         services.Configure<BlobStorageOptions>(
             configuration.GetSection("BlobStorage"));

@@ -31,7 +31,7 @@ internal sealed class UploadProfileImageCommandHandler(
             BlobContainers.ProfileImages,
             userId,
             cancellationToken
-            );
+        );
 
         if (user.ProfileImageId is not null)
         {
@@ -40,7 +40,7 @@ internal sealed class UploadProfileImageCommandHandler(
                 userId,
                 user.ProfileImageId.Value,
                 cancellationToken
-                );
+            );
         }
 
         user.ProfileImageId = fileid;
